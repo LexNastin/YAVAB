@@ -81,7 +81,7 @@ async function app()
 		fatalError(err);
 	});
 
-	var interactions = await walk('./interactions/')
+	var interactions = await walk('./interactions/').catch((err) => {error(err);});
 
 	interactions.forEach(async interaction => {
 		let interactionClass = require(`./${interaction}`);
