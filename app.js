@@ -87,7 +87,7 @@ async function app()
 		let interactionClass = require(`./${interaction}`);
 		let interactionObject = new interactionClass();
 
-		if(interactionObject.object) {
+		if(interactionObject.options) {
 			await createInteractions(interactionObject.name, interactionObject.descr, interactionObject.options);
 		} else {
 			await createInteractions(interactionObject.name, interactionObject.descr);
@@ -143,25 +143,8 @@ async function app()
 		let interactionObject;
 
 		interactionObject = getInteraction(`${interaction.data.name}`);
-
 		if (interactionObject) {
-			if (interaction.data.options) {
-				interaction.data.options.forEach((item) => {
-					if(item.type == 2) {
-						if (item.options) {
-							item.options.forEach((subItem) => {
-								interactionObject.run(client, interaction, `${interaction.data.name}_${item.name}_${subItem.name}`);
-							})
-						}
-					} else if (item.type == 1) {
-						interactionObject.run(client, interaction, `${interaction.data.name}_${item.name}`);
-					} else {
-						interactionObject.run(client, interaction, `${interaction.data.name}`);
-					}
-				})
-			} else {
-				interactionObject.run(client, interaction, `${interaction.data.name}`);
-			}
+			interactionObject.run(client, interaction, interaction.data.options);
 		}
 	});
 	

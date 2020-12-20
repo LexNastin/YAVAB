@@ -7,7 +7,7 @@ module.exports = class ping {
 		this.descr = 'Tests if bot is alive'
 	}
 
-	async run(client, interaction, subItem) {
+	async run(client, interaction, options) {
 		client.api.interactions(interaction.id, interaction.token).callback.post({data: {
 			type: 4,
 			data: {

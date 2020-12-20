@@ -7,7 +7,7 @@ module.exports = class author {
 		this.descr = 'Tells you who wrote the bot'
 	}
 
-	async run(client, interaction, subCommand) {
+	async run(client, interaction, options) {
 		client.api.interactions(interaction.id, interaction.token).callback.post({data: {
 			type: 4,
 			data: {
