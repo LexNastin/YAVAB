@@ -80,7 +80,7 @@ async function app()
 	.catch((err) => {
 		fatalError(err);
 	});
-
+	
 	var interactions = await walk('./interactions/').catch((err) => {error(err);});
 
 	interactions.forEach(async interaction => {
@@ -93,7 +93,7 @@ async function app()
 			await createInteractions(interactionObject.name, interactionObject.descr);
 		}
 		
-		client.interactions[interactionObject.name] = (interactionObject);
+		client.interactions[interactionObject.name] = interactionObject;
 	});
 	
 	CH.commands.forEach(x => {
@@ -141,27 +141,27 @@ async function app()
 	
 	client.ws.on('INTERACTION_CREATE', async interaction => {
 		let interactionObject;
-		
-		if (interaction.data.options) {
-			interaction.data.options.forEach((item) => {
-				if(item.type == 2) {
-					if (item.options) {
-						item.options.forEach((subItem) => {
-							interactionObject = getInteraction(`${interaction.data.name} ${item.name} ${subItem.name}`);
-						})
-					}
-				} else if (item.type == 1) {
-					interactionObject = getInteraction(`${interaction.data.name} ${item.name}`);
-				} else {
-					interactionObject = getInteraction(`${interaction.data.name}`);
-				}
-			})
-		} else {
-			interactionObject = getInteraction(`${interaction.data.name}`);
-		}
+
+		interactionObject = getInteraction(`${interaction.data.name}`);
 
 		if (interactionObject) {
-			interactionObject.run(client, interaction);
+			if (interaction.data.options) {
+				interaction.data.options.forEach((item) => {
+					if(item.type == 2) {
+						if (item.options) {
+							item.options.forEach((subItem) => {
+								interactionObject.run(client, interaction, `${interaction.data.name}_${item.name}_${subItem.name}`);
+							})
+						}
+					} else if (item.type == 1) {
+						interactionObject.run(client, interaction, `${interaction.data.name}_${item.name}`);
+					} else {
+						interactionObject.run(client, interaction, `${interaction.data.name}`);
+					}
+				})
+			} else {
+				interactionObject.run(client, interaction, `${interaction.data.name}`);
+			}
 		}
 	});
 	

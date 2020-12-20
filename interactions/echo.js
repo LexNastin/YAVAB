@@ -15,7 +15,7 @@ module.exports = class echo {
 		]
 	}
 
-	async run(client, interaction) {
+	async run(client, interaction, subItem) {
 		client.api.interactions(interaction.id, interaction.token).callback.post({data: {
 			type: 4,
 			data: {
