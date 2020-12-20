@@ -138,20 +138,6 @@ async function app()
 	client.on('ready', () => {
 		msg(`${process.env.BOT_NAME} is ready to use`)
 	});
-
-
-	client.api.applications(client.user.id).commands.post({data: {
-		name: 'echo',
-		description: 'Sends back a copy of your message',
-		options: [
-			{
-				type: 3,
-				name: 'text',
-				description: 'The text to send',
-				required: true
-			}
-		]
-	}});
 	
 	client.ws.on('INTERACTION_CREATE', async interaction => {
 		let interactionObject;
