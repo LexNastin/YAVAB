@@ -65,13 +65,13 @@ module.exports = class admin {
 					},
 					{
 						name: 'edit',
-						description: 'Edit an Embed',
+						description: 'Edit an Embed (Deletes everything currently in the embed.)',
 						type: 1,
 						options: [
 							{
 								name: 'message_id',
-								description: 'Embed',
-								type: 4,
+								description: 'The message ID',
+								type: 3,
 								required: true
 							},
 							{
@@ -120,6 +120,19 @@ module.exports = class admin {
 								type: 3
 							}
 						]
+					},
+					{
+						name: 'delete',
+						description: 'Remove an embed from a message',
+						type: 1,
+						options: [
+							{
+								name: 'message_id',
+								description: 'The message ID',
+								type: 3,
+								required: true
+							}
+						]
 					}
 				]
 			}
@@ -165,13 +178,13 @@ module.exports = class admin {
 						await client.api.interactions(interaction.id, interaction.token).callback.post({data: {
 							type: 4,
 							data: {
-								content: 'Done'
+								content: 'Sent'
 							}
 						}}).catch((err) => {console.log(err)});
 
 						await client.channels.fetch(interaction.channel_id)
 						.then(channel => {
-							channel.send('', {
+							channel.send({
 								embed: {
 									rich: true,
 									title: args['title'],
@@ -200,13 +213,37 @@ module.exports = class admin {
 							});
 						}
 
-						client.channels.fetch(interaction.channel_id)
+						await client.channels.fetch(interaction.channel_id)
 						.then(channel => {
-							channel.messages.fetch(args['message_id'])
+							channel.messages.fetch(`${args['message_id']}`)
 							.then(message => {
-								console.log(message);
+								message.edit({
+									embed: {
+										rich: true,
+										title: args['title'],
+										description: args['description'],
+										url: args['url'],
+										color: args['color'],
+										footer: args['footer'],
+										image: args['image'],
+										video: args['video'],
+										author: args['author'],
+										fields: args['fields']
+									}
+								})
 							}).catch((err) => {console.log(err)});
 						}).catch((err) => {console.log(err)});
+
+						await client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+							type: 4,
+							data: {
+								content: 'Edited'
+							}
+						}}).catch((err) => {console.log(err)});
+
+						await sleep(2000);
+
+						client.api.webhooks(client.user.id, interaction.token).messages('@original').delete().catch((err) => {console.log(err)});
 
 						client.api.interactions(interaction.id, interaction.token).callback.post({data: {
 							type: 4,
@@ -215,6 +252,32 @@ module.exports = class admin {
 							}
 						}});
 						break;
+
+					case 'delete':
+						if (options[0].options[0].options) {
+							options[0].options[0].options.forEach(option => {
+								args[option.name] = option.value
+							});
+						}
+
+						await client.channels.fetch(interaction.channel_id)
+						.then(channel => {
+							channel.messages.fetch(`${args['message_id']}`)
+							.then(message => {
+								message.edit({})
+							}).catch((err) => {console.log(err)});
+						}).catch((err) => {console.log(err)});
+
+						await client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+							type: 4,
+							data: {
+								content: 'Removed'
+							}
+						}}).catch((err) => {console.log(err)});
+
+						await sleep(2000);
+
+						client.api.webhooks(client.user.id, interaction.token).messages('@original').delete().catch((err) => {console.log(err)});
 				
 					default:
 						break;
