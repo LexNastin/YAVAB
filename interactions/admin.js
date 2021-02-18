@@ -252,33 +252,6 @@ module.exports = class admin {
 							}
 						}});
 						break;
-
-					case 'delete':
-						if (options[0].options[0].options) {
-							options[0].options[0].options.forEach(option => {
-								args[option.name] = option.value
-							});
-						}
-
-						await client.channels.fetch(interaction.channel_id)
-						.then(channel => {
-							channel.messages.fetch(`${args['message_id']}`)
-							.then(message => {
-								message.edit({})
-							}).catch((err) => {console.log(err)});
-						}).catch((err) => {console.log(err)});
-
-						await client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-							type: 4,
-							data: {
-								content: 'Removed'
-							}
-						}}).catch((err) => {console.log(err)});
-
-						await sleep(2000);
-
-						client.api.webhooks(client.user.id, interaction.token).messages('@original').delete().catch((err) => {console.log(err)});
-				
 					default:
 						break;
 				}
