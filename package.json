@@ -16,6 +16,8 @@
     "discord.js": "^12.5.1",
     "djs-commands": "^1.2.2",
     "dotenv": "^8.2.0",
-    "file": "^0.2.2"
+    "file": "^0.2.2",
+    "google-assistant": "^0.6.4",
+    "puppeteer": "^7.1.0"
   }
 }

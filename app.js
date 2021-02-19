@@ -10,6 +10,14 @@
 // |_______________________________________________________________________________________|
 //
 
+//  _______________________________________________________________________________________
+// |                                                                                       |
+// | You have paused sometimes with the development fo this project, but it is going well  |
+// | so far, so don't give up... You got this!                                             |
+// |                                                                                       |
+// |                                                                           – Arch 2021 |
+// |_______________________________________________________________________________________|
+//
 
 require('dotenv').config();
 const chalk = require('chalk');
@@ -19,6 +27,10 @@ const client = new discord.Client();
 const fs = require('fs');
 const file = require('file');
 const { walk } = require('./walk.js');
+const googleAssistant = require('./googleAssistant.js');
+
+const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
+const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
 
 const CH = new CommandHandler({
 	folder: __dirname + '/commands/',
@@ -169,6 +181,32 @@ async function app()
 			}
 			catch (err) {
 				error(err);
+			}
+		}
+
+		if (message.channel.id == '812299968920027166') {
+			if (message.author.id == '237668270268743682') {
+				message.channel.startTyping()
+				await manuelAssistant.sendCmd(message.content);
+				await message.channel.send({
+					files: [{
+						attachment: 'google_out.png',
+						name: 'google.png'
+					}]
+				})
+				message.channel.stopTyping();
+				fs.unlinkSync('google_out.png');
+			} else {
+				message.channel.startTyping()
+				await assistant.sendCmd(message.content);
+				await message.channel.send({
+					files: [{
+						attachment: 'google_out.png',
+						name: 'google.png'
+					}]
+				})
+				message.channel.stopTyping();
+				fs.unlinkSync('google_out.png');
 			}
 		}
 	});
