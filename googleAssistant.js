@@ -50,7 +50,7 @@ module.exports = class googleAssistant {
 
 		return new Promise((resolve, reject) => {
 			this.promiseResolve = resolve;
-			this.assistant.start({textQuery: cmd, isNew: true, screen: {isOn: true}});
+			this.assistant.start({textQuery: cmd, isNew: false, screen: {isOn: true}});
 		});
 	}
 }
