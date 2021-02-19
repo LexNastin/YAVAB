@@ -31,6 +31,7 @@ const googleAssistant = require('./googleAssistant.js');
 
 const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
 const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
+const archAssistant = new googleAssistant('exclude/arch_tokens.json', 'Arch Assistant');
 
 const CH = new CommandHandler({
 	folder: __dirname + '/commands/',
@@ -190,6 +191,17 @@ async function app()
 			if (message.author.id == '237668270268743682') {
 				message.channel.startTyping()
 				await manuelAssistant.sendCmd(message.content);
+				await message.channel.send({
+					files: [{
+						attachment: 'google_out.png',
+						name: 'google.png'
+					}]
+				})
+				message.channel.stopTyping();
+				fs.unlinkSync('google_out.png');
+			} else if (message.author.id == '383363277100417027') {
+				message.channel.startTyping()
+				await archAssistant.sendCmd(message.content);
 				await message.channel.send({
 					files: [{
 						attachment: 'google_out.png',
