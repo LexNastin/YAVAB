@@ -185,6 +185,8 @@ async function app()
 		}
 
 		if (message.channel.id == '812299968920027166') {
+			if (msg.author.bot) return;
+			
 			if (message.author.id == '237668270268743682') {
 				message.channel.startTyping()
 				await manuelAssistant.sendCmd(message.content);

@@ -28,7 +28,7 @@ module.exports = class googleAssistant {
 						await page.setViewport({ width: 1920, height: 1080 })
 						await page.setContent(screen.data.toString());
 						//await page.waitForXPath('//*[@id="assistant-card-content"]/div[2]/div/div')
-						await new Promise(r => setTimeout(r, 500));
+						await new Promise(r => setTimeout(r, 1000));
 						await page.screenshot({ path: 'google_out.png', omitBackground: true })
 						await browser.close();
 						this.promiseResolve();
