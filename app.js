@@ -29,9 +29,11 @@ const file = require('file');
 const { walk } = require('./walk.js');
 const googleAssistant = require('./googleAssistant.js');
 
-const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
-const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
-const archAssistant = new googleAssistant('exclude/arch_tokens.json', 'Arch Assistant');
+//const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
+//const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
+//const archAssistant = new googleAssistant('exclude/arch_tokens.json', 'Arch Assistant');
+var assistantInstances = {};
+var shouldGoogleType = false;
 
 const CH = new CommandHandler({
 	folder: __dirname + '/commands/',
@@ -88,6 +90,9 @@ function getInteraction(name) {
 async function app()
 {
 	envErrChk();
+
+	assistantInstances['383363277100417027'] = new googleAssistant('exclude/arch_tokens.json', 'Arch Assistant');
+	assistantInstances['237668270268743682'] = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
 	
 	await client.login(process.env.BOT_TOKEN)
 	.catch((err) => {
@@ -185,43 +190,28 @@ async function app()
 			}
 		}
 
-		if (message.channel.id == '812299968920027166') {
+		if (message.channel.id == '812299968920027166') {			
 			if (message.author.bot) return;
-
-			if (message.author.id == '237668270268743682') {
-				message.channel.startTyping()
-				await manuelAssistant.sendCmd(message.content);
-				await message.channel.send({
-					files: [{
-						attachment: 'google_out.png',
-						name: 'google.png'
-					}]
-				})
-				message.channel.stopTyping();
-				fs.unlinkSync('google_out.png');
-			} else if (message.author.id == '383363277100417027') {
-				message.channel.startTyping()
-				await archAssistant.sendCmd(message.content);
-				await message.channel.send({
-					files: [{
-						attachment: 'google_out.png',
-						name: 'google.png'
-					}]
-				})
-				message.channel.stopTyping();
-				fs.unlinkSync('google_out.png');
-			} else {
-				message.channel.startTyping()
-				await assistant.sendCmd(message.content);
-				await message.channel.send({
-					files: [{
-						attachment: 'google_out.png',
-						name: 'google.png'
-					}]
-				})
-				message.channel.stopTyping();
-				fs.unlinkSync('google_out.png');
+			
+			if (!assistantInstances[message.author.id]) {
+				assistantInstances[message.author.id] = new googleAssistant('exclude/tokens.json', `${message.author.username} Assistant`);
 			}
+			
+			async function checkReady() {
+				if(assistantInstances[message.author.id].ready == false) {
+					setTimeout(checkReady, 100); /* this checks the flag every 100 milliseconds*/
+				}
+			}
+			await checkReady();
+			
+			await assistantInstances[message.author.id].sendCmd(message.content);
+			await message.channel.send(`<@${message.author.id}>`, {
+				files: [{
+					attachment: 'google_out.png',
+					name: 'google.png'
+				}]
+			})
+			fs.unlinkSync('google_out.png');
 		}
 	});
 }

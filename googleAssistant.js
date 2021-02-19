@@ -8,6 +8,7 @@ module.exports = class googleAssistant {
 		this.ready = false
 		this.promiseResolve;
 		this.name = name;
+		this.loading = false;
 
 		this.assistantAuth = {
 			keyFilePath: path.resolve(__dirname, 'exclude/client_secret_57395275052-jmu9hb6emovqpojiji4bpt50r12qhus0.apps.googleusercontent.com.json'),
