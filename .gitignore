@@ -105,3 +105,6 @@ dist
 
 # Custom Exclude Directory
 exclude/
+
+# Delete Log
+delLog*
