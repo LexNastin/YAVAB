@@ -28,6 +28,7 @@ const fs = require('fs');
 const file = require('file');
 const { walk } = require('./walk.js');
 const googleAssistant = require('./googleAssistant.js');
+const { serialize } = require('v8');
 
 //const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
 //const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');

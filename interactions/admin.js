@@ -135,6 +135,11 @@ module.exports = class admin {
 						]
 					}
 				]
+			},
+			{
+				name: 'dellog',
+				description: 'Log of deleted messages',
+				type: 1
 			}
 		]
 	}
@@ -255,6 +260,29 @@ module.exports = class admin {
 					default:
 						break;
 				}
+				break;
+
+			case 'dellog':
+				let delLog = fs.readFileSync('delLog.js');
+				console.log(delLog);
+				let finalObject = {};
+
+				Object.entries()
+
+
+
+				let finalString = '# Deleted Messages Log ( Possibly Contains Private Info, Keep File Private )\n';
+				Object.entries(assistantInstances).forEach(([key, value]) => {
+					switch(key) {
+						case createdTimestamp:
+							finalString += `<section>${key}`;
+							break;
+
+						default:
+							break;
+					}
+				});
+				//console.log(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Deleted Messages</title><script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.0.4/markdown-it.min.js"></script><script>async function run() {var md = window.markdownit();var result = md.render('${finalString}');await new Promise(r => setTimeout(r, 50))window.document.body.innerHTML = result;}run();</script></head><body></body></html>`)
 				break;
 		
 			default:
