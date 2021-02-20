@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const fs = require('fs');
 require('dotenv').config();
 
 module.exports = class admin {
@@ -263,26 +264,54 @@ module.exports = class admin {
 				break;
 
 			case 'dellog':
-				let delLog = fs.readFileSync('delLog.js');
-				console.log(delLog);
+				let delLog = JSON.parse(fs.readFileSync(`${process.cwd()}/delLog.json`));
 				let finalObject = {};
 
-				Object.entries()
+				Object.entries(delLog).forEach(([key, value]) => {
+					finalObject[value.authorID.toString()] = finalObject[value.authorID.toString()] || {};
 
-
-
-				let finalString = '# Deleted Messages Log ( Possibly Contains Private Info, Keep File Private )\n';
-				Object.entries(assistantInstances).forEach(([key, value]) => {
-					switch(key) {
-						case createdTimestamp:
-							finalString += `<section>${key}`;
-							break;
-
-						default:
-							break;
+					let messageObj = {
+						messageId: value.id,
+						content: {
+							content: value.content,
+							cleanContent: value.cleanContent
+						},
+						attachments: value.attachmentUrls,
+						embeds: value.embeds,
+						lastEdit: value.editedTimestamp,
+						pinned: value.pinned,
+						tts: value.tts
 					}
+
+					finalObject[value.authorID.toString()][key] = messageObj;
 				});
-				//console.log(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Deleted Messages</title><script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.0.4/markdown-it.min.js"></script><script>async function run() {var md = window.markdownit();var result = md.render('${finalString}');await new Promise(r => setTimeout(r, 50))window.document.body.innerHTML = result;}run();</script></head><body></body></html>`)
+
+				let finalString = '# Deleted Messages Log ( Possibly Contains Private Info, Keep File Private )\\n';
+
+				Object.entries(finalObject).forEach(([key, value]) => {
+					let messageStr = '';
+
+					Object.entries(value).forEach(([msgKey, msgValue]) => {
+						let embedList = '';
+						let attachmentList = '';
+
+						msgValue.embeds.forEach((embed) => {
+							embedList += ``
+						})
+
+						msgValue.attachments.forEach((attachment) => {
+							attachmentList += `- ${attachment}\\n\\n`
+						})
+
+						//console.log(finalObject)
+
+						//messageStr += `<details>\\n<summary>${msgKey}</summary>\\n- Message ID: \`${msgValue.messageId}\`\\n<details>\\n<summary>Content</summary>\\n- Content: \`${msgValue.content.content}\`\\n- Clean Content: \`${msgValue.content.cleanContent}\`\\n</details>\\n<details>\\n<summary>Attachments</summary>\\n${attachmentList}\\n</details>\\n<details>\\n<summary>Embeds</summary>\\n${embedList}\\n</details>\\n- Last Edit: \`${msgValue.lastEdit}\`\\n- [${msgValue.pinned ? 'x' : ' '}] Pinned\\n- [${msgValue.tts ? 'x' : ' '}] TTS\\n</details>\\n`
+						messageStr += `<details>\\n<summary>${msgKey}</summary>\\n\\n- Message ID: \`${msgValue.messageId}\`\\n\\n<details>\\n<summary>Content</summary>\\n\\n- Content: \`${msgValue.content.content}\`\\n- Clean Content: \`${msgValue.content.cleanContent}\`\\n\\n</details>\\n<details>\\n<summary>Attachments</summary>\\n\\n${attachmentList}\\n\\n</details>\\n<details>\\n<summary>Embeds</summary>\\n\\n${embedList}\\n\\n</details>\\n\\n- Last Edit: \`${msgValue.lastEdit}\`\\n- [${msgValue.pinned ? 'x' : ' '}] Pinned\\n- [${msgValue.tts ? 'x' : ' '}] TTS\\n\\n</details>\\n\\n---\\n\\n`;
+					})
+
+					finalString += `<details>\\n<summary>${key}</summary>\\n\\n${messageStr}\\n</details>`
+				});
+				// fs.writeFileSync('../delLog.html', `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Deleted Messages</title><script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.0.4/markdown-it.min.js"></script><script>async function run() {var md = window.markdownit({html: true});var result = md.render('${finalString}');await new Promise(r => setTimeout(r, 50));window.document.body.innerHTML = result;}run();</script></head><body></body></html>`)
 				break;
 		
 			default:
