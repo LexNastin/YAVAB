@@ -25,7 +25,6 @@ const discord = require('discord.js');
 const { CommandHandler } = require('djs-commands');
 const client = new discord.Client();
 const fs = require('fs');
-const { walk } = require('./modules/walk.js');
 const GoogleAssistant = require('./modules/googleAssistant.js');
 const InteractionHandler = require('./modules/interactionHandler.js');
 
