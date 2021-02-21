@@ -28,8 +28,13 @@ const fs = require('fs');
 const GoogleAssistant = require('./modules/googleAssistant.js');
 const InteractionHandler = require('./modules/interactionHandler.js');
 
+client.servers = {};
+client.commands = [];
+client.interactions = {};
+client.assistantInstances = {};
+
 const interactionHandler = new InteractionHandler(client);
-const googleAssistant = new GoogleAssistant(client);
+client.googleAssistant = new GoogleAssistant(client);
 
 //const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
 //const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
@@ -40,9 +45,6 @@ const CH = new CommandHandler({
 	prefix: [process.env.BOT_PREFIX]
 });
 
-client.servers = {};
-client.commands = [];
-client.interactions = {};
 
 const error = function(x) {console.log(chalk.bgRed.black(x))};
 const warning = function(x) {console.log(chalk.bgYellow.black.underline(x))};
@@ -150,7 +152,7 @@ async function app()
 			}
 		}
 
-		googleAssistant.assistantMessage(message);
+		client.googleAssistant.assistantMessage(message);
 	});
 }
 

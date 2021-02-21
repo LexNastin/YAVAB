@@ -122,19 +122,19 @@ module.exports = class admin {
 							}
 						]
 					},
-					{
-						name: 'delete',
-						description: 'Remove an embed from a message',
-						type: 1,
-						options: [
-							{
-								name: 'message_id',
-								description: 'The message ID',
-								type: 3,
-								required: true
-							}
-						]
-					}
+					// {
+					// 	name: 'delete',
+					// 	description: 'Remove an embed from a message',
+					// 	type: 1,
+					// 	options: [
+					// 		{
+					// 			name: 'message_id',
+					// 			description: 'The message ID',
+					// 			type: 3,
+					// 			required: true
+					// 		}
+					// 	]
+					// }
 				]
 			},
 			{
