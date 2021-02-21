@@ -4,14 +4,15 @@ const puppeteer = require('puppeteer');
 
 module.exports = class googleAssistant {
 
-	constructor(tokens, name) {
+	constructor(tokens, name, id) {
 		this.ready = false
 		this.promiseResolve;
 		this.name = name;
 		this.loading = false;
+		this.id = id;
 
 		this.assistantAuth = {
-			keyFilePath: path.resolve(__dirname, 'exclude/client_secret_57395275052-jmu9hb6emovqpojiji4bpt50r12qhus0.apps.googleusercontent.com.json'),
+			keyFilePath: path.resolve(__dirname, '../exclude/client_secret_57395275052-jmu9hb6emovqpojiji4bpt50r12qhus0.apps.googleusercontent.com.json'),
 			savedTokensPath: path.resolve(__dirname, tokens)
 		}
 		
@@ -30,8 +31,9 @@ module.exports = class googleAssistant {
 						await page.setContent(screen.data.toString());
 						//await page.waitForXPath('//*[@id="assistant-card-content"]/div[2]/div/div')
 						await new Promise(r => setTimeout(r, 1000));
-						await page.screenshot({ path: 'google_out.png', omitBackground: true })
+						await page.screenshot({ path: `../google_out_${this.id}.png`, omitBackground: true })
 						await browser.close();
+						this.loading = false;
 						this.promiseResolve();
 					})();
 				})
@@ -51,6 +53,7 @@ module.exports = class googleAssistant {
 
 		return new Promise((resolve, reject) => {
 			this.promiseResolve = resolve;
+			this.loading = true;
 			this.assistant.start({textQuery: cmd, isNew: false, screen: {isOn: true}});
 		});
 	}

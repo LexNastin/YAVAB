@@ -25,16 +25,16 @@ const discord = require('discord.js');
 const { CommandHandler } = require('djs-commands');
 const client = new discord.Client();
 const fs = require('fs');
-const file = require('file');
-const { walk } = require('./walk.js');
-const googleAssistant = require('./googleAssistant.js');
-const { serialize } = require('v8');
+const { walk } = require('./modules/walk.js');
+const GoogleAssistant = require('./modules/googleAssistant.js');
+const InteractionHandler = require('./modules/interactionHandler.js');
+
+const interactionHandler = new InteractionHandler(client);
+const googleAssistant = new GoogleAssistant(client);
 
 //const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
 //const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
 //const archAssistant = new googleAssistant('exclude/arch_tokens.json', 'Arch Assistant');
-var assistantInstances = {};
-var shouldGoogleType = false;
 
 const CH = new CommandHandler({
 	folder: __dirname + '/commands/',
@@ -69,51 +69,16 @@ function fatalError(err)
 	process.exit();
 }
 
-async function createInteractions(name, description) {
-	await client.api.applications(client.user.id).guilds('696473961961357534').commands.post({data: {
-		name: name,
-		description: description
-	}}).catch((err) => {error(err);});
-}
-
-async function createInteractions(name, description, options) {
-	await client.api.applications(client.user.id).guilds('696473961961357534').commands.post({data: {
-		name: name,
-		description: description,
-		options: options
-	}}).catch((err) => {error(err);});
-}
-
-function getInteraction(name) {
-	return client.interactions[name];
-}
-
 async function app()
 {
 	envErrChk();
-
-	assistantInstances['383363277100417027'] = new googleAssistant('exclude/arch_tokens.json', 'Arch Assistant');
-	assistantInstances['237668270268743682'] = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
 	
 	await client.login(process.env.BOT_TOKEN)
 	.catch((err) => {
 		fatalError(err);
 	});
-	
-	var interactions = await walk('./interactions/').catch((err) => {error(err);});
 
-	interactions.forEach(async interaction => {
-		let interactionClass = require(`./${interaction}`);
-		let interactionObject = new interactionClass();
-
-		if(interactionObject.options) {
-			await createInteractions(interactionObject.name, interactionObject.descr, interactionObject.options);
-		} else {
-			await createInteractions(interactionObject.name, interactionObject.descr);
-		}
-		
-		client.interactions[interactionObject.name] = interactionObject;
-	});
+	interactionHandler.init();
 	
 	CH.commands.forEach(x => {
 		client.commands.push({ name: x.name, descr: x.descr });
@@ -159,12 +124,7 @@ async function app()
 	});
 	
 	client.ws.on('INTERACTION_CREATE', async interaction => {
-		let interactionObject;
-
-		interactionObject = getInteraction(`${interaction.data.name}`);
-		if (interactionObject) {
-			interactionObject.run(client, interaction, interaction.data.options);
-		}
+		interactionHandler.handleInteraction(interaction);
 	});
 	
 	client.on('message', async message => {
@@ -191,29 +151,7 @@ async function app()
 			}
 		}
 
-		if (message.channel.id == '812299968920027166') {			
-			if (message.author.bot) return;
-			
-			if (!assistantInstances[message.author.id]) {
-				assistantInstances[message.author.id] = new googleAssistant('exclude/tokens.json', `${message.author.username} Assistant`);
-			}
-			
-			async function checkReady() {
-				if(assistantInstances[message.author.id].ready == false) {
-					setTimeout(checkReady, 100); /* this checks the flag every 100 milliseconds*/
-				}
-			}
-			await checkReady();
-			
-			await assistantInstances[message.author.id].sendCmd(message.content);
-			await message.channel.send(`<@${message.author.id}>`, {
-				files: [{
-					attachment: 'google_out.png',
-					name: 'google.png'
-				}]
-			})
-			fs.unlinkSync('google_out.png');
-		}
+		googleAssistant.assistantMessage(message);
 	});
 }
 
