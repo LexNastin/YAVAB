@@ -1,11 +1,17 @@
+require('dotenv').config();
 const googleAssistant = require('./googleAssistantInstance.js');
 const fs = require('fs');
 
 module.exports = class GoogleAssistant {
 	constructor(client) {
 		this.client = client;
-		this.client.assistantInstances['383363277100417027'] = new googleAssistant('../exclude/arch_tokens.json', 'Arch Assistant', '383363277100417027');
-		this.client.assistantInstances['237668270268743682'] = new googleAssistant('../exclude/manuel_tokens.json', 'Manuel Assistant', '237668270268743682');
+	}
+	
+	async init() {
+		this.client.assistantInstances['383363277100417027'] = new googleAssistant(process.env.ARCH_TOKENS, 'Arch Assistant', '383363277100417027');
+		this.client.assistantInstances['237668270268743682'] = new googleAssistant(process.env.MANUEL_TOKENS, 'Manuel Assistant', '237668270268743682');
+		await this.client.assistantInstances['383363277100417027'].init();
+		await this.client.assistantInstances['237668270268743682'].init();
 	}
 
 	async assistantMessage(message) {
@@ -13,7 +19,8 @@ module.exports = class GoogleAssistant {
 			if (message.author.bot) return;
 			
 			if (!this.client.assistantInstances[message.author.id]) {
-				this.client.assistantInstances[message.author.id] = new googleAssistant('exclude/tokens.json', `${message.author.username} Assistant`);
+				this.client.assistantInstances[message.author.id] = new googleAssistant(process.env.DISCORD_TOKENS, `${message.author.username} Assistant`);
+				await this.client.assistantInstances[message.author.id].init();
 			}
 			
 			async function checkReady(assistantInstances) {

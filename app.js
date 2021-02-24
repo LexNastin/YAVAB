@@ -73,12 +73,14 @@ function fatalError(err)
 async function app()
 {
 	envErrChk();
+
 	
 	await client.login(process.env.BOT_TOKEN)
 	.catch((err) => {
 		fatalError(err);
 	});
-
+	
+	await client.googleAssistant.init();
 	interactionHandler.init();
 	
 	CH.commands.forEach(x => {

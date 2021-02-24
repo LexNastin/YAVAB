@@ -1,5 +1,8 @@
+require('dotenv').config();
 const GoogleAssistant = require('google-assistant');
-const path = require('path')
+const Auth = require('google-assistant/components/auth');
+const OAuth2 = new (require('google-assistant/node_modules/google-auth-library'))().OAuth2;
+const path = require('path');
 const puppeteer = require('puppeteer');
 
 module.exports = class googleAssistant {
@@ -10,13 +13,20 @@ module.exports = class googleAssistant {
 		this.name = name;
 		this.loading = false;
 		this.id = id;
+		this.tokens = tokens;
 
-		this.assistantAuth = {
-			keyFilePath: path.resolve(__dirname, '../exclude/client_secret_57395275052-jmu9hb6emovqpojiji4bpt50r12qhus0.apps.googleusercontent.com.json'),
-			savedTokensPath: path.resolve(__dirname, tokens)
-		}
-		
-		this.assistant = new GoogleAssistant(this.assistantAuth);
+		// this.assistantAuth = {
+		// 	keyFilePath: path.resolve(__dirname, '../exclude/client_secret_57395275052-jmu9hb6emovqpojiji4bpt50r12qhus0.apps.googleusercontent.com.json'),
+		// 	savedTokensPath: path.resolve(__dirname, tokens)
+		// }
+	}
+
+	async init() {
+		const oauthClient = new OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+		let parsedTokens = JSON.parse(this.tokens);
+		oauthClient.setCredentials(parsedTokens);
+
+		this.assistant = new GoogleAssistant({oauth2Client: oauthClient});
 		
 		this.startConversation = (conversation) => {
 			// setup the conversation and send data to it
