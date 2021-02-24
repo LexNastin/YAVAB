@@ -1,6 +1,6 @@
 require('dotenv').config();
 const GoogleAssistant = require('google-assistant');
-const Auth = require('google-assistant/components/auth');
+const MyGoogleAssistant = require('./my-google-assistant.js')
 const OAuth2 = new (require('google-assistant/node_modules/google-auth-library'))().OAuth2;
 const path = require('path');
 const puppeteer = require('puppeteer');

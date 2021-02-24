@@ -50,7 +50,12 @@ module.exports = class GoogleAssistant {
 			.catch((err) => {
 				this.error(err);
 			});
-			fs.unlinkSync(`../google_out_${message.author.id}.png`);
+			try {
+				fs.unlinkSync(`../google_out_${message.author.id}.png`);
+			}
+			catch(err) {
+				this.error(err);
+			};
 		}
 	}
 
@@ -104,6 +109,11 @@ module.exports = class GoogleAssistant {
 				this.error(err);
 			});
 		}
-		fs.unlinkSync(`../google_out_${message.author.id}.png`);
+		try {
+			fs.unlinkSync(`../google_out_${message.author.id}.png`);
+		}
+		catch(err) {
+			this.error(err);
+		};
 	}
 }

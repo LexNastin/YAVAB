@@ -25,8 +25,8 @@ const discord = require('discord.js');
 const { CommandHandler } = require('djs-commands');
 const client = new discord.Client();
 const fs = require('fs');
-const GoogleAssistant = require('./modules/googleAssistant.js');
-const InteractionHandler = require('./modules/interactionHandler.js');
+const GoogleAssistant = require('./components/googleAssistant.js');
+const InteractionHandler = require('./components/interactionHandler.js');
 
 client.servers = {};
 client.commands = [];
