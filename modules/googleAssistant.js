@@ -1,10 +1,14 @@
 require('dotenv').config();
 const googleAssistant = require('./googleAssistantInstance.js');
+const chalk = require('chalk');
 const fs = require('fs');
 
 module.exports = class GoogleAssistant {
 	constructor(client) {
 		this.client = client;
+		this.error = function(x) {console.log(chalk.bgRed.black(x))};
+		this.warning = function(x) {console.log(chalk.bgYellow.black.underline(x))};
+		this.msg = function(x) {console.log(chalk.bgWhiteBright.black(x))};
 	}
 	
 	async init() {
@@ -43,6 +47,9 @@ module.exports = class GoogleAssistant {
 					name: 'google.png'
 				}]
 			})
+			.catch((err) => {
+				this.error(err);
+			});
 			fs.unlinkSync(`../google_out_${message.author.id}.png`);
 		}
 	}
@@ -82,6 +89,9 @@ module.exports = class GoogleAssistant {
 					attachment: `../google_out_${message.author.id}.png`,
 					name: 'google.png'
 				}]
+			})
+			.catch((err) => {
+				this.error(err);
 			});
 		} else {
 			await message.channel.send(`<@${message.author.id}>\n> ${message.content}`, {
@@ -89,6 +99,9 @@ module.exports = class GoogleAssistant {
 					attachment: `../google_out_${message.author.id}.png`,
 					name: 'google.png'
 				}]
+			})
+			.catch((err) => {
+				this.error(err);
 			});
 		}
 		fs.unlinkSync(`../google_out_${message.author.id}.png`);
