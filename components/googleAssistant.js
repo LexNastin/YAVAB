@@ -49,12 +49,16 @@ module.exports = class GoogleAssistant {
 			})
 			.catch((err) => {
 				this.error(err);
+				this.client.assistantInstances[message.author.id].loading = false;
+				return;
 			});
 			try {
 				fs.unlinkSync(`../google_out_${message.author.id}.png`);
 			}
 			catch(err) {
 				this.error(err);
+				this.client.assistantInstances[message.author.id].loading = false;
+				return;
 			};
 		}
 	}
@@ -97,6 +101,8 @@ module.exports = class GoogleAssistant {
 			})
 			.catch((err) => {
 				this.error(err);
+				this.client.assistantInstances[message.author.id].loading = false;
+				return;
 			});
 		} else {
 			await message.channel.send(`<@${message.author.id}>\n> ${message.content}`, {
@@ -107,13 +113,19 @@ module.exports = class GoogleAssistant {
 			})
 			.catch((err) => {
 				this.error(err);
+				this.client.assistantInstances[message.author.id].loading = false;
+				return;
 			});
 		}
 		try {
 			fs.unlinkSync(`../google_out_${message.author.id}.png`);
+			this.client.assistantInstances[message.author.id].loading = false;
+			return;
 		}
 		catch(err) {
 			this.error(err);
+			this.client.assistantInstances[message.author.id].loading = false;
+			return;
 		};
 	}
 }
