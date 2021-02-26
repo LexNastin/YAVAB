@@ -160,7 +160,13 @@ async function app()
 
 function envErrChk()
 {
-	process.env.BOT_NAME == '' ? process.env.BOT_NAME = 'YAVAB' : '';
-	process.env.BOT_PREFIX == '' ? process.env.BOT_PREFIX = '!' : '';
-	process.env.BOT_TOKEN == '' ? fatalError(`Token Missing!`) : '';
+	process.env.BOT_TOKEN = process.env.BOT_TOKEN ?? fatalError(`Token Missing!`);
+	process.env.BOT_NAME = process.env.BOT_NAME ?? 'YAVAB';
+	process.env.BOT_PREFIX = process.env.BOT_PREFIX ?? '/';
+	process.env.CLIENT_ID = process.env.CLIENT_ID ?? fatalError('Assistant Client ID Missing!');
+	process.env.CLIENT_SECRET = process.env.CLIENT_SECRET ?? fatalError('Assistant Client Secret Missing!');
+	process.env.REDIRECT_URI = process.env.REDIRECT_URI ?? fatalError('Assistant Redirect URI Missing!');
+	process.env.DISCORD_TOKENS = process.env.DISCORD_TOKENS ?? fatalError('Assistant Default Tokens Missing!');
+	process.env.ARCH_TOKENS = process.env.ARCH_TOKENS ?? warning('Arch\'s Tokens Missing!');
+	process.env.MANUEL_TOKENS = process.env.MANUEL_TOKENS ?? warning('Manuel\'s Tokens Missing!');
 }

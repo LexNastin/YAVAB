@@ -25,11 +25,16 @@ module.exports = class googleAssistant {
 	}
 
 	async init() {
-		const oauthClient = new OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
-		let parsedTokens = JSON.parse(this.tokens);
-		oauthClient.setCredentials(parsedTokens);
+		try {
+			const oauthClient = new OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+			let parsedTokens = JSON.parse(this.tokens);
+			oauthClient.setCredentials(parsedTokens);
 
-		this.assistant = new GoogleAssistant({oauth2Client: oauthClient});
+			this.assistant = new GoogleAssistant({oauth2Client: oauthClient});
+		}
+		catch (err) {
+			this.error(err);
+		}
 		
 		this.startConversation = (conversation) => {
 			// setup the conversation and send data to it
