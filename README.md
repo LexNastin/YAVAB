@@ -3,4 +3,6 @@ This is my Discord Bot called YAVAB, stands for Yet Another Very Awesome Bot. It
 
 This is very fun and I plan to continue developing it for a while at least!
 
+**Edit:** `YAVAB` stands for `Yet Another Very Awesome Bot`
+
 ![YAVAB Logo](https://github.com/ArchGryphon9362/YAVAB/raw/main/icon/YAVAB.png)
