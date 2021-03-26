@@ -5,7 +5,7 @@ module.exports = {
 	run: async (client, message) => {
 		let attachments = [];
 
-		currentDelLog = JSON.parse(fs.readFileSync('delLog.json'));
+		currentDelLog = JSON.parse(fs.readFileSync('persist/delLog.json'));
 
 		message.attachments.forEach(attachment => {
 			attachments.push(attachment.url);
@@ -13,7 +13,7 @@ module.exports = {
 		message.attachmentUrls = attachments;
 
 		currentDelLog[message.createdTimestamp.toString()] = message
-		fs.writeFileSync('delLog.json', JSON.stringify(currentDelLog));
+		fs.writeFileSync('persist/delLog.json', JSON.stringify(currentDelLog));
 		//fs.writeFileSync(`delLog/${message.author.username}_${message.author.id}_${message.createdTimestamp}.json`, JSON.stringify(message));
 	}
 }

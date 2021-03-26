@@ -19,7 +19,7 @@ module.exports = class GoogleAssistant {
 	}
 
 	async assistantMessage(message) {
-		if (message.channel.id == '812299968920027166' || message.channel.type == 'dm') {			
+		if (message.channel.id == ASSISTANT_CHANNEL_ID || message.channel.type == 'dm') {			
 			if (message.author.bot) return;
 			
 			if (!this.client.assistantInstances[message.author.id]) {

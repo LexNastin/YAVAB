@@ -156,7 +156,7 @@ async function app()
 		if (process.env.ENBALE_ASSISTANT == '1') {
 			client.googleAssistant.assistantMessage(message);
 		} else {
-			if (message.channel.id == '812299968920027166' || message.channel.type == 'dm') {
+			if (message.channel.id == process.env.ASSISTANT_CHANNEL_ID || message.channel.type == 'dm') {
 				message.channel.send('Sorry, the Google Assistant is currently disabled');
 			}
 		}
@@ -168,11 +168,13 @@ function envErrChk()
 	process.env.BOT_TOKEN = process.env.BOT_TOKEN ?? fatalError(`Token Missing!`);
 	process.env.BOT_NAME = process.env.BOT_NAME ?? 'YAVAB';
 	process.env.BOT_PREFIX = process.env.BOT_PREFIX ?? '/';
+	process.env.GUILD_ID = process.env.GUILD_ID ?? warning('Guild ID Missing!');
 	process.env.ENBALE_ASSISTANT = process.env.ENBALE_ASSISTANT ?? '0';
-	process.env.CLIENT_ID = process.env.CLIENT_ID ?? fatalError('Assistant Client ID Missing!');
-	process.env.CLIENT_SECRET = process.env.CLIENT_SECRET ?? fatalError('Assistant Client Secret Missing!');
-	process.env.REDIRECT_URI = process.env.REDIRECT_URI ?? fatalError('Assistant Redirect URI Missing!');
-	process.env.DISCORD_TOKENS = process.env.DISCORD_TOKENS ?? fatalError('Assistant Default Tokens Missing!');
-	process.env.ARCH_TOKENS = process.env.ARCH_TOKENS ?? warning('Arch\'s Tokens Missing!');
-	process.env.MANUEL_TOKENS = process.env.MANUEL_TOKENS ?? warning('Manuel\'s Tokens Missing!');
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.ASSISTANT_CHANNEL_ID = process.env.ASSISTANT_CHANNEL_ID ?? warning('Assistant Channel ID Missing!') : '';
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.CLIENT_ID = process.env.CLIENT_ID ?? warning('Assistant Client ID Missing!') : '';
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.CLIENT_SECRET = process.env.CLIENT_SECRET ?? warning('Assistant Client Secret Missing!') : '';
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.REDIRECT_URI = process.env.REDIRECT_URI ?? warning('Assistant Redirect URI Missing!') : '';
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.DISCORD_TOKENS = process.env.DISCORD_TOKENS ?? fatalError('Assistant Default Tokens Missing!') : '';
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.ARCH_TOKENS = process.env.ARCH_TOKENS ?? warning('Arch\'s Tokens Missing!') : '';
+	process.env.ENBALE_ASSISTANT == '1' ? process.env.MANUEL_TOKENS = process.env.MANUEL_TOKENS ?? warning('Manuel\'s Tokens Missing!') : '';
 }

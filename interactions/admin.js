@@ -264,7 +264,7 @@ module.exports = class admin {
 				break;
 
 			case 'dellog':
-				let delLog = JSON.parse(fs.readFileSync(`${process.cwd()}/delLog.json`));
+				let delLog = JSON.parse(fs.readFileSync(`${process.cwd()}/persist/delLog.json`));
 				let finalObject = {};
 
 				Object.entries(delLog).forEach(([key, value]) => {

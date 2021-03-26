@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { walk } = require('./walk.js');
 const chalk = require('chalk');
 
@@ -28,14 +29,14 @@ module.exports = class InteractionHandler {
 	}
 
 	async createInteractions(name, description) {
-		await this.client.api.applications(this.client.user.id).guilds('696473961961357534').commands.post({data: {
+		await this.client.api.applications(this.client.user.id).guilds(process.env.GUILD_ID).commands.post({data: {
 			name: name,
 			description: description
 		}}).catch((err) => {error(err);});
 	}
 	
 	async createInteractions(name, description, options) {
-		await this.client.api.applications(this.client.user.id).guilds('696473961961357534').commands.post({data: {
+		await this.client.api.applications(this.client.user.id).guilds(process.env.GUILD_ID).commands.post({data: {
 			name: name,
 			description: description,
 			options: options
