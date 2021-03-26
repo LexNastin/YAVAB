@@ -20,21 +20,22 @@
 //
 
 require('dotenv').config();
+envErrChk();
 const chalk = require('chalk');
 const discord = require('discord.js');
 const { CommandHandler } = require('djs-commands');
 const client = new discord.Client();
 const fs = require('fs');
-const GoogleAssistant = require('./components/googleAssistant.js');
+const GoogleAssistant = process.env.ENBALE_ASSISTANT == '1' ? require('./components/googleAssistant.js') : '';
 const InteractionHandler = require('./components/interactionHandler.js');
 
 client.servers = {};
 client.commands = [];
 client.interactions = {};
-client.assistantInstances = {};
+process.env.ENBALE_ASSISTANT == '1' ? client.assistantInstances = {} : '';
 
 const interactionHandler = new InteractionHandler(client);
-client.googleAssistant = new GoogleAssistant(client);
+process.env.ENBALE_ASSISTANT == '1' ? client.googleAssistant = new GoogleAssistant(client) : '';
 
 //const assistant = new googleAssistant('exclude/tokens.json', 'Assistant');
 //const manuelAssistant = new googleAssistant('exclude/manuel_tokens.json', 'Manuel Assistant');
@@ -72,15 +73,13 @@ function fatalError(err)
 
 async function app()
 {
-	envErrChk();
-
 	
 	await client.login(process.env.BOT_TOKEN)
 	.catch((err) => {
 		fatalError(err);
 	});
 	
-	await client.googleAssistant.init();
+	process.env.ENBALE_ASSISTANT == '1' ? await client.googleAssistant.init() : '';
 	interactionHandler.init();
 	
 	CH.commands.forEach(x => {
@@ -154,7 +153,13 @@ async function app()
 			}
 		}
 
-		client.googleAssistant.assistantMessage(message);
+		if (process.env.ENBALE_ASSISTANT == '1') {
+			client.googleAssistant.assistantMessage(message);
+		} else {
+			if (message.channel.id == '812299968920027166' || message.channel.type == 'dm') {
+				message.channel.send('Sorry, the Google Assistant is currently disabled');
+			}
+		}
 	});
 }
 
@@ -163,6 +168,7 @@ function envErrChk()
 	process.env.BOT_TOKEN = process.env.BOT_TOKEN ?? fatalError(`Token Missing!`);
 	process.env.BOT_NAME = process.env.BOT_NAME ?? 'YAVAB';
 	process.env.BOT_PREFIX = process.env.BOT_PREFIX ?? '/';
+	process.env.ENBALE_ASSISTANT = process.env.ENBALE_ASSISTANT ?? '1';
 	process.env.CLIENT_ID = process.env.CLIENT_ID ?? fatalError('Assistant Client ID Missing!');
 	process.env.CLIENT_SECRET = process.env.CLIENT_SECRET ?? fatalError('Assistant Client Secret Missing!');
 	process.env.REDIRECT_URI = process.env.REDIRECT_URI ?? fatalError('Assistant Redirect URI Missing!');

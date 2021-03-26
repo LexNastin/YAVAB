@@ -65,6 +65,9 @@ module.exports = class GoogleAssistant {
 
 	async assistantCommand(message, dm) {
 		if (message.author.bot) return;
+		if (!(process.env.ENABLE_ASSISTANT == '1')) {
+			message.channel.send('Sorry, the Google Assistant is currently disabled')
+		}
 		
 		if (!this.client.assistantInstances[message.author.id]) {
 			this.client.assistantInstances[message.author.id] = new googleAssistant('exclude/tokens.json', `${message.author.username} Assistant`);

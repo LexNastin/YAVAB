@@ -1,18 +1,8 @@
-const { walk } = require('./walk.js');
+require('dotenv').config();
 
 async function test() {
 
-	let interactions = await walk('./interactions/').catch((err) => {error(err);});
-	let intermediate = [];
-	let final = {};
-
-	interactions.forEach(interaction => {
-		let temp = interaction.split('\\');
-		temp.shift()
-
-		intermediate.push(temp);
-	})
-	console.log(intermediate)
+	process.env.ENBALE_ASSISTANT == '1' ? console.log('yes') : console.log('no');
 
 }
 

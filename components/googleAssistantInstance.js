@@ -18,10 +18,6 @@ module.exports = class googleAssistant {
 		this.error = function(x) {console.log(chalk.bgRed.black(x))};
 		this.warning = function(x) {console.log(chalk.bgYellow.black.underline(x))};
 		this.msg = function(x) {console.log(chalk.bgWhiteBright.black(x))};
-		// this.assistantAuth = {
-		// 	keyFilePath: path.resolve(__dirname, '../exclude/client_secret_57395275052-jmu9hb6emovqpojiji4bpt50r12qhus0.apps.googleusercontent.com.json'),
-		// 	savedTokensPath: path.resolve(__dirname, tokens)
-		// }
 	}
 
 	async init() {
@@ -37,9 +33,6 @@ module.exports = class googleAssistant {
 		}
 		
 		this.startConversation = (conversation) => {
-			// setup the conversation and send data to it
-			// for a full example, see `examples/mic-speaker.js`
-		
 			conversation
 				.on('screen-data', (screen) => {
 					(async () => {

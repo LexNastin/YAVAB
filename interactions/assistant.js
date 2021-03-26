@@ -30,9 +30,17 @@ module.exports = class assistant {
 		}
 
 		if (interaction.data.options[1]) {
-			client.googleAssistant.assistantCommand(fakeMsg, interaction.data.options[1].value)
+			if (process.env.ENBALE_ASSISTANT == '1') {
+				client.googleAssistant.assistantCommand(fakeMsg, interaction.data.options[1].value)
+			} else {
+				fakeMsg.channel.send('Sorry, the Google Assistant is currently disabled');
+			}
 		} else {
-			client.googleAssistant.assistantCommand(fakeMsg, false);
+			if (process.env.ENBALE_ASSISTANT == '1') {
+				client.googleAssistant.assistantCommand(fakeMsg, false);
+			} else {
+				fakeMsg.channel.send('Sorry, the Google Assistant is currently disabled');
+			}
 		}
 		// client.api.interactions(interaction.id, interaction.token).callback.post({data: {
 		// 	type: 4,
