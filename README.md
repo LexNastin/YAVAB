@@ -59,6 +59,7 @@ docker run -d \
 ```
 
 ## Parameters
+Don't forget to change these, specifically the ones without the defaults, and if you don't plan on using the (currently broken) Google Assistant, you don't need any environment variables that are described after the `ENABLE_ASSISTANT` variable. So the only things you really need to set up are `BOT_TOKEN`, `BOT_NAME`, `BOT_PREFIX`, `GUILD_ID`, aand `ENABLE_ASSISTANT`, of which the only required variables are `BOT_TOKEN`, and `GUILD_ID`.
 Parameter|Usage|Default Value
 :-:|:-|:-:
 `-e BOT_TOKEN`|The bot token provided by discord|`undefined`
