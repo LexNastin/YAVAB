@@ -43,7 +43,7 @@ docker-compose up -d
 docker pull ghcr.io/archgryphon9362/yavab:latest
 docker run -d \
   --name=yavab \
-  -e TOKEN=SBTRnyJ234N34B3B4324Tr78543s2nyrE2s4b66TTBV8Sr3e \
+  -e BOT_TOKEN=SBTRnyJ234N34B3B4324Tr78543s2nyrE2s4b66TTBV8Sr3e \
   -e BOT_NAME=YAVAB \
   -e BOT_PREFIX=/ \
   -e GUILD_ID=69049503490904900 \
@@ -61,7 +61,7 @@ docker run -d \
 ## Parameters
 Parameter|Usage|Default Value
 :-:|:-|:-:
-`-e TOKEN`|The bot token provided by discord|`undefined`
+`-e BOT_TOKEN`|The bot token provided by discord|`undefined`
 `-e BOT_NAME`|The name that the bot calls itself|`YAVAB`
 `-e BOT_PREFIX`|The prefix that the bot says it uses|`/`
 `-e GUILD_ID`|The id of the server the bot will be running in, yes, currently we only support 1 server|`undefined`
