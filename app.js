@@ -168,7 +168,7 @@ function envErrChk()
 	process.env.BOT_TOKEN = process.env.BOT_TOKEN ?? fatalError(`Token Missing!`);
 	process.env.BOT_NAME = process.env.BOT_NAME ?? 'YAVAB';
 	process.env.BOT_PREFIX = process.env.BOT_PREFIX ?? '/';
-	process.env.ENBALE_ASSISTANT = process.env.ENBALE_ASSISTANT ?? '1';
+	process.env.ENBALE_ASSISTANT = process.env.ENBALE_ASSISTANT ?? '0';
 	process.env.CLIENT_ID = process.env.CLIENT_ID ?? fatalError('Assistant Client ID Missing!');
 	process.env.CLIENT_SECRET = process.env.CLIENT_SECRET ?? fatalError('Assistant Client Secret Missing!');
 	process.env.REDIRECT_URI = process.env.REDIRECT_URI ?? fatalError('Assistant Redirect URI Missing!');
