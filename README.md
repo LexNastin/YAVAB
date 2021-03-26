@@ -60,18 +60,18 @@ docker run -d \
 
 ## Parameters
 Don't forget to change these, specifically the ones without the defaults, and if you don't plan on using the (currently broken) Google Assistant, you don't need any environment variables that are described after the `ENABLE_ASSISTANT` variable. So the only things you really need to set up are `BOT_TOKEN`, `BOT_NAME`, `BOT_PREFIX`, `GUILD_ID`, aand `ENABLE_ASSISTANT`, of which the only required variables are `BOT_TOKEN`, and `GUILD_ID`.
-Parameter|Usage|Default Value
-:-:|:-|:-:
-`-e BOT_TOKEN`|The bot token provided by discord|`undefined`
-`-e BOT_NAME`|The name that the bot calls itself|`YAVAB`
-`-e BOT_PREFIX`|The prefix that the bot says it uses|`/`
-`-e GUILD_ID`|The id of the server the bot will be running in, yes, currently we only support 1 server|`undefined`
-`-e ENBALE_ASSISTANT`|Whether to enable the Google Assistant, takes in a value of `1` or `0`, but is currently broken, so don't enable as the bot will crash|`0`
-`-e ASSISTANT_CHANNEL_ID`|**Required if you enabled `ENABLE_ASSISTANT`;** The ID of the channel designated for recieving assistant input, set to `0` if you don't want to use it|`undefined`
-`-e CLIENT_ID`|**Required if you enabled `ENABLE_ASSISTANT`;** The client ID of the Google Actions application *(in the JSON it provided)*|`undefined`
-`-e CLIENT_SECRET`|**Required if you enabled `ENABLE_ASSISTANT`;** The client secret of the Google Actions application *(in the JSON it provided)*|`undefined`
-`-e REDIRECT_URI`|**Required if you enabled `ENABLE_ASSISTANT`;** The redirect uri given by the same Google Actions application *(in the JSON it provided)*|`undefined`
-`-e DISCORD_TOKENS`|**Required if you enabled `ENABLE_ASSISTANT`;** Create a Google account for use by the bot assistant and get authorization for use with the assistant, after you've done that, paste the entire JSON here|`undefined`
-`-v /usr/src/app/persist`|The directory that currently only contains the "deleted messages logs", more things will be stored in here with more updates to the bot, it is written in the format of `<host path>:<container path>` `<host path>` being user-defined and `<container path>` being `/usr/src/app/persist`|`undefined`
+Parameter|Usage|Default Value|Required?
+:-:|:-|:-:|:-:
+`-e BOT_TOKEN`|The bot token provided by discord|`undefined`|Yes
+`-e BOT_NAME`|The name that the bot calls itself|`YAVAB`|No
+`-e BOT_PREFIX`|The prefix that the bot says it uses|`/`|No
+`-e GUILD_ID`|The id of the server the bot will be running in, yes, currently we only support 1 server|`undefined`|Yes
+`-e ENBALE_ASSISTANT`|Whether to enable the Google Assistant, takes in a value of `1` or `0`, but is currently broken, so don't enable as the bot will crash|`0`|No
+`-e ASSISTANT_CHANNEL_ID`|**Required if you enabled `ENABLE_ASSISTANT`;** The ID of the channel designated for recieving assistant input, set to `0` if you don't want to use it|`undefined`|No (except if `ENABLE_ASSISTANT` is on)
+`-e CLIENT_ID`|**Required if you enabled `ENABLE_ASSISTANT`;** The client ID of the Google Actions application *(in the JSON it provided)*|`undefined`|No (except if `ENABLE_ASSISTANT` is on)
+`-e CLIENT_SECRET`|**Required if you enabled `ENABLE_ASSISTANT`;** The client secret of the Google Actions application *(in the JSON it provided)*|`undefined`|No (except if `ENABLE_ASSISTANT` is on)
+`-e REDIRECT_URI`|**Required if you enabled `ENABLE_ASSISTANT`;** The redirect uri given by the same Google Actions application *(in the JSON it provided)*|`undefined`|No (except if `ENABLE_ASSISTANT` is on)
+`-e DISCORD_TOKENS`|**Required if you enabled `ENABLE_ASSISTANT`;** Create a Google account for use by the bot assistant and get authorization for use with the assistant, after you've done that, paste the entire JSON here|`undefined`|No (except if `ENABLE_ASSISTANT` is on)
+`-v /usr/src/app/persist`|The directory that currently only contains the "deleted messages logs", more things will be stored in here with more updates to the bot, it is written in the format of `<host path>:<container path>` `<host path>` being user-defined and `<container path>` being `/usr/src/app/persist`|`undefined`|No
 
 ![YAVAB Logo](https://github.com/ArchGryphon9362/YAVAB/raw/main/icon/YAVAB.png)
